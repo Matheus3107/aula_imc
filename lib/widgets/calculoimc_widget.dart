@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 class CalculoImcWidget extends StatefulWidget {
   @override
-  _CalculoImcWidget createState() => _CalculoImcWidget();
+  _CalculoImcWidgetState createState() => _CalculoImcWidgetState();
 }
 
-class _CalculoImcWidget extends State<CalculoImcWidget> {
+class _CalculoImcWidgetState extends State<CalculoImcWidget> {
+  int _radioValue = 0;
   GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   TextEditingController alturacontroller = TextEditingController();
   TextEditingController pesocontroller = TextEditingController();
-
   String _resultadoimc;
 
   void _calcularimc() {
@@ -24,26 +24,52 @@ class _CalculoImcWidget extends State<CalculoImcWidget> {
     });
   }
 
+  void _handleRadioValueChange(int value) {
+    setState(() {
+      _radioValue = value;
+    });
+  }
+
+  void initState() {
+    setState(() {
+      _radioValue = 1;
+    });
+    super.initState();
+  }
+
   String getClassificacao(num imc) {
-    String strclassificao;
-    if (imc < 18.6)
-      strclassificao = "Abaixo do peso";
-    else if (imc < 25.0)
-      strclassificao = "Peso ideal";
-    else if (imc < 30.0)
-      strclassificao = "Levemente acima do peso";
-    else if (imc < 35.0)
-      strclassificao = "Obesidade grau 1";
-    else if (imc < 40.0)
-      strclassificao = "Obesidade grau 2";
-    else
-      strclassificao = "Obesidade grau 3";
-    return strclassificao;
+    String strClassificacao = "";
+    if (_radioValue == 1) {
+      if (imc < 20)
+        strClassificacao = "Abaixo do peso";
+      else if (imc < 26.4)
+        strClassificacao = "Peso ideal";
+      else if (imc < 27.8)
+        strClassificacao = "Levemente acima do peso";
+      else if (imc < 31.1)
+        strClassificacao = "Acima do Peso";
+      else if (imc < 31.1) strClassificacao = "Obesidade";
+    } else {
+      if (imc < 18.5) {
+        strClassificacao = "Abaixo do peso";
+      } else if (imc < 24.9) {
+        strClassificacao = "Peso Ideal";
+      } else if (imc < 29.9) {
+        strClassificacao = "Levemente acima do peso";
+      } else if (imc < 34.9) {
+        strClassificacao = "Obesidade grau I";
+      } else if (imc < 39.9) {
+        strClassificacao = "Obesidade grau II";
+      } else {
+        strClassificacao = "Obesidade grau III";
+      }
+    }
+
+    return strClassificacao;
   }
 
   @override
   Widget build(BuildContext context) {
-    //retornou um form Pai de todos.
     return Form(
       key: _formkey,
       child: Container(
@@ -51,32 +77,31 @@ class _CalculoImcWidget extends State<CalculoImcWidget> {
           children: [
             Container(
               margin: EdgeInsets.all(16),
-              //altura
-              //mudamos de textfield para TextFormField
+              // ALTURA
               child: TextFormField(
-                keyboardType: TextInputType.number, //tipo de teclado
+                keyboardType: TextInputType.number, // teclado
                 controller: alturacontroller,
                 validator: (value) {
-                  //validador
-                  return value.isEmpty ? "Informe a altura" : null;
+                  return value.isEmpty
+                      ? "Informe a altura"
+                      : null; // validaçãoa
                 },
                 decoration: InputDecoration(
-                  labelText: "Altura em cm: ",
+                  labelText: "Altura em cm",
                 ),
               ),
             ),
             Container(
               margin: EdgeInsets.all(16),
-              //peso
+              //PESO
               child: TextFormField(
                 keyboardType: TextInputType.number,
                 controller: pesocontroller,
                 validator: (value) {
-                  //validador
-                  return value.isEmpty ? "Informe a altura" : null;
+                  return value.isEmpty ? "Informe o peso" : null;
                 },
                 decoration: InputDecoration(
-                  labelText: "Peso em Kg: ",
+                  labelText: "Peso em Kg",
                 ),
               ),
             ),
@@ -94,7 +119,7 @@ class _CalculoImcWidget extends State<CalculoImcWidget> {
                     _calcularimc();
                   }
                 },
-                child: Text("Calcular"),
+                child: Text('Calcular'),
               ),
             ),
           ],
