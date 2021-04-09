@@ -77,7 +77,25 @@ class _CalculoImcWidgetState extends State<CalculoImcWidget> {
           children: [
             Container(
               margin: EdgeInsets.all(16),
-              // ALTURA
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Radio(
+                      value: 1,
+                      groupValue: _radioValue,
+                      onChanged: _handleRadioValueChange),
+                  new Text("Homem"),
+                  Radio(
+                    value: 2,
+                    groupValue: _radioValue,
+                    onChanged: _handleRadioValueChange,
+                  ),
+                  new Text("Mulher")
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.all(16),
               child: TextFormField(
                 keyboardType: TextInputType.number, // teclado
                 controller: alturacontroller,
